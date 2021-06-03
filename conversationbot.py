@@ -14,15 +14,13 @@ bot.1
 """
 
 import logging
+
+from telegram.message import Message
 import config
 from typing import Dict
-import registration
-import times
-import menu
-from database import userDAO
-import datetime
-import scheduled
-from apscheduler.schedulers.background import BackgroundScheduler
+import others
+import eligibility
+import temporary_deferral
 
 from telegram import ReplyKeyboardMarkup, Update, ReplyKeyboardRemove
 from telegram.ext import (
@@ -41,41 +39,52 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-CHOOSING, TYPING_REPLY, TYPING_CHOICE, CHOOSING_TIME, TIME_DONE, TIME_CHOICE, CHOOSING_START, PROMPT, RECEIVED_PROMPT = range(9)
+START_MENU, START_ELIGIBILITY, ANSWERED, TEMP_DEF_PROMPT, SICK_QUESTION, CHOOSING_ILLNESS, OTHER_ILLNESS, CONTINUE = range(8)
 
+start_keyboard = [
+    ['Basic Eligibility Quiz'],
+    ['Reasons for Temporary Deferral'],
+    ['Reasons for Permanent Deferral'],
+    ['How do I sign up for Project Blood upcoming blood drive?'],
+    ['Bye Bye Mr Bot man!']
+]
 
-sched = BackgroundScheduler()
-sched.start()
+start_markup = ReplyKeyboardMarkup(start_keyboard, one_time_keyboard=True)
 
-def received_time(update: Update, context: CallbackContext) -> int:
-    """Store info provided by user and ask for the next category."""
-    print(update)
-    user_id = update.message.chat.id
-    time = update.message.text
-
-    parse_time =  datetime.datetime.strptime(time, '%H:%M')
-    job = sched.add_job(scheduled.send_scheduled_activity, 'cron', [update, context],hour=parse_time.hour, minute=parse_time.minute)
-    job = sched.add_job(scheduled.send_scheduled_prompt, 'cron', [update, context],hour=parse_time.hour, minute=parse_time.minute, second=15)
-    print(parse_time)
-
-    userDAO.edit_set_time(user_id, parse_time)
-
+def start(update: Update, context: CallbackContext) -> int:
     update.message.reply_text(
-        f"Neat! We will suggest the activities at {parse_time.time()}")
+        " Welcome!! Welcome to Project Blood SG! How may I help you today?",
+        reply_markup = start_markup,
+    )
 
-    return RECEIVED_PROMPT
+    return START_MENU
 
-def received_prompt(update: Update, context: CallbackContext) -> int:
-    user_id = update.message.chat.id
-    prompt = update.message.text
-    user = userDAO.get_user(user_id)
+eligibility_keyboard = [
+    ['Start', 'Back'],
+]
 
+eligibility_markup = ReplyKeyboardMarkup(eligibility_keyboard, one_time_keyboard=True)
 
+def is_eligible(update: Update, context: CallbackContext) -> int:    
     update.message.reply_text(
-            f"Neat! We see you at {user.set_time.time()} tomorrow")
-    
+        text="Hi! Welcome to Project Blood. Let's take an eligibility test",
+        reply_markup=eligibility_markup,
+    )
+
+    return START_ELIGIBILITY
+
+def bye(update: Update, context: CallbackContext) -> int:
+    update.message.reply_text(
+        f'Bye Bye! We hope you enjoyed using this bot and it has helped you.\n'
+        'Disclaimer: The reasons provided in this telebot is non-exhaustive. Please check out https://www.hsa.gov.sg/blood-donation/can-i-donate for a more comprehensive guide on blood donations.\n\n'
+        'This bot is brought to you by Bing, Edric and Marie:))\n\n'
+        'Project Blood SG hopes to see you on 24th July!'
+    )
+
     return ConversationHandler.END
 
+
+    
 def main():
     """Run the bot."""
     # Create the Updater and pass it your bot's token.
@@ -86,64 +95,72 @@ def main():
 
     # Add conversation handler with the states CHOOSING, TYPING_CHOICE and TYPING_REPLY
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('register', registration.register), 
-        CommandHandler('start', menu.start),
-        CommandHandler('settime', times.settime),
-        CommandHandler('help', menu.help),
-        CommandHandler('stop', menu.stop)],
+        entry_points=[CommandHandler('start', start)],
         states={
-            CHOOSING: [
+            START_MENU: [
                 MessageHandler(
-                    Filters.regex('^(Age|Favourite colour|Number of siblings)$'), registration.register_choice
-                ),
-                MessageHandler(Filters.regex('^Something else...$'), registration.reg_custom_choice),
-            ],
-            TYPING_CHOICE: [
-                MessageHandler(
-                    Filters.text & ~(Filters.command | Filters.regex('^Done$')), registration.register_choice
-                )
-            ],
-            TYPING_REPLY: [
-                MessageHandler(
-                    Filters.text & ~(Filters.command | Filters.regex('^Done$')), registration.received_information
-                )
-            ],
-            CHOOSING_TIME: [
-                MessageHandler(
-                    Filters.regex('^Time$'), times.time_choice
-                ),
-                MessageHandler(
-                    Filters.regex('^Duration$'), times.duration_choice
-                )
-            ],
-            TIME_CHOICE: [
-                MessageHandler(
-                    Filters.text & ~(Filters.command | Filters.regex('^Done$')), received_time
-                )
-            ],
-            TIME_DONE: [
-                MessageHandler(
-                  Filters.regex('^Done$'), times.received_time
-                )
-            ],
-            CHOOSING_START: [
-                MessageHandler(
-                    Filters.regex('^Help!$'), menu.help
+                    Filters.regex('Basic Eligibility Quiz'), is_eligible
                 ), 
                 MessageHandler(
-                    Filters.regex('^Set TRYVE time$'), times.settime
+                    Filters.regex('^Reasons for Temporary Deferral$'), temporary_deferral.temporary_deferral_prompt
+                ), 
+                MessageHandler(
+                    Filters.regex('Reasons for Permanent Deferral'), others.permanent
+                ), 
+                MessageHandler(
+                    Filters.regex('How do I sign up for Project Blood upcoming blood drive?'), others.sign_up
+                ), 
+                MessageHandler(
+                    Filters.regex('Bye Bye Mr Bot man!'), bye
+                ), 
+            ],
+            START_ELIGIBILITY: [
+                MessageHandler(
+                    Filters.regex('^Start$'), eligibility.question
                 ),
                 MessageHandler(
-                    Filters.regex('^Stop receiving suggestions$'), menu.stop
+                    Filters.regex('Back'), start
+                )
+            ],
+            ANSWERED: [
+                MessageHandler(
+                    ~Filters.regex('^Back$'), eligibility.answer
+                ),
+                MessageHandler(
+                    Filters.regex('^Back$'), start
+                )
+            ],
+            TEMP_DEF_PROMPT: [
+                MessageHandler(
+                    ~Filters.regex('Back$'), temporary_deferral.answer
+                ),
+                MessageHandler(
+                    Filters.regex('Back$'), start
                 )
             ], 
-            RECEIVED_PROMPT: [
+            SICK_QUESTION: [
                 MessageHandler(
-                    Filters.text & ~(Filters.command | Filters.regex('^Done$')), received_prompt
+                    Filters.regex("^Let's do it!$"), temporary_deferral.sick_question
+                ),
+                MessageHandler(
+                    Filters.regex("^Nah$"), start
+                )
+            ],
+            CHOOSING_ILLNESS: [
+                MessageHandler(
+                    ~Filters.regex('^Done$'), temporary_deferral.display_illness
+                )
+            ], 
+            CONTINUE: [
+                MessageHandler(
+                    Filters.regex('^Continue$'), start
+                ),
+                MessageHandler(
+                    ~ Filters.regex('^Continue$'), bye
                 )
             ]
         },
-        fallbacks=[MessageHandler(Filters.regex('^Done$'), registration.done)],
+        fallbacks=[MessageHandler(Filters.regex('^Bye$'), bye)],
     )
 
     dispatcher.add_handler(conv_handler)
