@@ -42,18 +42,18 @@ logger = logging.getLogger(__name__)
 START_MENU, START_ELIGIBILITY, ANSWERED, TEMP_DEF_PROMPT, SICK_QUESTION, CHOOSING_ILLNESS, OTHER_ILLNESS, CONTINUE = range(8)
 
 start_keyboard = [
-    ['Basic Eligibility Quiz'],
-    ['Reasons for Temporary Deferral'],
-    ['Reasons for Permanent Deferral'],
-    ['How do I sign up for Project Blood upcoming blood drive?'],
-    ['Bye Bye Mr Bot man!']
+    ['if I pass the Basic Eligibility Quiz'],
+    ['reasons for Temporary Deferral'],
+    ['reasons for Permanent Deferral'],
+    ['how to sign up for 24th July blood drive?'],
+    ['Bye Bye Bot Bot!']
 ]
 
 start_markup = ReplyKeyboardMarkup(start_keyboard, one_time_keyboard=True)
 
 def start(update: Update, context: CallbackContext) -> int:
     update.message.reply_text(
-        " Welcome!! Welcome to Project Blood SG! How may I help you today?",
+        " Welcome!! I am Project Blood SG's Bot Bot! How may I help you today?\n\nI will like to find out...\n",
         reply_markup = start_markup,
     )
 
@@ -75,10 +75,10 @@ def is_eligible(update: Update, context: CallbackContext) -> int:
 
 def bye(update: Update, context: CallbackContext) -> int:
     update.message.reply_text(
-        f'Bye Bye! We hope you enjoyed using this bot and it has helped you.\n'
+        f'Bye Bye! We hope you enjoyed using this bot and it has helped you understand the factors before donating blood.\n'
         'Disclaimer: The reasons provided in this telebot is non-exhaustive. Please check out https://www.hsa.gov.sg/blood-donation/can-i-donate for a more comprehensive guide on blood donations.\n\n'
-        'This bot is brought to you by Bing, Edric and Marie:))\n\n'
-        'Project Blood SG hopes to see you on 24th July!'
+        'Project Blood SG hopes to see you on 24th July!;)\n\n'
+        'This bot is brought to you by Bing, Edric and Marie:))'
     )
 
     return ConversationHandler.END
@@ -99,19 +99,19 @@ def main():
         states={
             START_MENU: [
                 MessageHandler(
-                    Filters.regex('Basic Eligibility Quiz'), is_eligible
+                    Filters.regex('if I pass the Basic Eligibility Quiz'), is_eligible
                 ), 
                 MessageHandler(
-                    Filters.regex('^Reasons for Temporary Deferral$'), temporary_deferral.temporary_deferral_prompt
+                    Filters.regex('^reasons for Temporary Deferral$'), temporary_deferral.temporary_deferral_prompt
                 ), 
                 MessageHandler(
-                    Filters.regex('Reasons for Permanent Deferral'), others.permanent
+                    Filters.regex('reasons for Permanent Deferral'), others.permanent
                 ), 
                 MessageHandler(
-                    Filters.regex('How do I sign up for Project Blood upcoming blood drive?'), others.sign_up
+                    Filters.regex('how to sign up for 24th July blood drive?'), others.sign_up
                 ), 
                 MessageHandler(
-                    Filters.regex('Bye Bye Mr Bot man!'), bye
+                    Filters.regex('Bye Bye Bot Bot!'), bye
                 ), 
             ],
             START_ELIGIBILITY: [
