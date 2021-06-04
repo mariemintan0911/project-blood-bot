@@ -55,11 +55,11 @@ def answer(update: Update, context: CallbackContext) -> int:
     return ANSWERED
 
 start_keyboard = [
-    ['Basic Eligibility Quiz'],
-    ['Reasons for Temporary Deferral'],
-    ['Reasons for Permanent Deferral'],
-    ['How do I sign up for Project Blood upcoming blood drive?'],
-    ['Bye Bye Mr Bot man!']
+    ['if I pass the Basic Eligibility Quiz'],
+    ['reasons for Temporary Deferral'],
+    ['reasons for Permanent Deferral'],
+    ['how to sign up for 24th July blood drive?'],
+    ['Bye Bye Bot Bot!']
 ]
 
 start_markup = ReplyKeyboardMarkup(start_keyboard, one_time_keyboard=True)
@@ -68,8 +68,8 @@ def not_eligible(update: Update, context: CallbackContext) -> int:
     global index
     index = -1
     update.message.reply_text(
-        f"Sorry you did not pass the pass the eligibility test :( \n\n"
-        'How may I help you today?',
+        f"Sorry you did not pass the pass the eligibility test :( \nThe question above was why you are unable to donate.\nTo find out more, please visit https://www.hsa.gov.sg/blood-donation/can-i-donate.\n\n"
+        'Do click on the other options to learn about other possible deferral reasons!',
         reply_markup = start_markup,
     )
 
@@ -80,7 +80,7 @@ def eligible(update: Update, context: CallbackContext) -> int:
     index = -1
     update.message.reply_text(
         f"Yay! you have passed our basic requirement test! However, there are other factors to consider before donating blood!\n\n"
-        'How may I help you today?',
+        'Click on the other options to learn more about possible deferral reasons!',
 
         reply_markup = start_markup,
     )
