@@ -10,11 +10,11 @@ START_MENU, START_ELIGIBILITY, ANSWERED, TEMP_DEF_PROMPT, SICK_QUESTION, CHOOSIN
 
 
 start_keyboard = [
-    ['Basic Eligibility Quiz'],
-    ['Reasons for Temporary Deferral'],
-    ['Reasons for Permanent Deferral'],
-    ['How do I sign up for Project Blood upcoming blood drive?'],
-    ['Bye Bye Mr Bot man!']
+    ['if I pass the Basic Eligibility Quiz'],
+    ['reasons for Temporary Deferral'],
+    ['reasons for Permanent Deferral'],
+    ['how to sign up for 24th July blood drive?'],
+    ['Bye Bye Bot Bot!']
 ]
 
 start_markup = ReplyKeyboardMarkup(start_keyboard, one_time_keyboard=True)
@@ -40,8 +40,8 @@ def permanent(update: Update, context: CallbackContext) -> int:
 
 def sign_up(update: Update, context: CallbackContext) -> int:
   update.message.reply_text(
-    'Booking an appointment is mandatory before entering our premises at Marymount CC on 24 July 2021.\n' 
-    'You can book a slot via Singpass or through our forms at www.___\n\n'
+    'Booking an appointment is mandatory before entering our premises at Marymount Community Club on 24 July 2021.\n' 
+    'You can book a slot via Singpass or through our forms at https://tinyurl.com/MMCCBloodDriveJuly2021\n\n'
 
     'What do you want to find out next?',
     reply_markup = start_markup,
