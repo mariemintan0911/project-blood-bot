@@ -10,7 +10,7 @@ from telegram.ext import (
 
 START_MENU, START_ELIGIBILITY, ANSWERED, TEMP_DEF_PROMPT, SICK_QUESTION, CHOOSING_ILLNESS, OTHER_ILLNESS, CONTINUE = range(8)
 
-subquestion_keyboard = [['I had COVID/ taken COVID vaccine'],
+subquestion_keyboard = [['I had COVID and/or taken COVID vaccine'],
                         ['I was sick the past 6 months'], #Chickenpox, measles or mumps  Cold Flu sore throat..Dengue Fever..Diarrhoea..Fever
                         ['I have taken medication/antibiotics the past 6 months'],
                         ['I am diagnosed with a mental health condition'],
@@ -21,7 +21,7 @@ subquestion_keyboard = [['I had COVID/ taken COVID vaccine'],
 
 
                         
-subquestions =  ['I had COVID/ taken COVID vaccine',
+subquestions =  ['I had COVID and/or taken COVID vaccine',
                 'I was sick the past 6 months', #Chickenpox, measles or mumps  Cold Flu sore throat..Dengue Fever..Diarrhoea..Fever
                 'I have taken medication/antibiotics the past 6 months',
                 'I am diagnosed with a mental health condition',
@@ -32,11 +32,11 @@ subquestions =  ['I had COVID/ taken COVID vaccine',
 subquestion_markup = ReplyKeyboardMarkup(subquestion_keyboard, one_time_keyboard=True)
 
 start_keyboard = [
-    ['Basic Eligibility Quiz'],
-    ['Reasons for Temporary Deferral'],
-    ['Reasons for Permanent Deferral'],
-    ['How do I sign up for Project Blood upcoming blood drive?'],
-    ['Bye Bye Mr Bot man!']
+    ['if I pass the Basic Eligibility Quiz'],
+    ['reasons for Temporary Deferral'],
+    ['reasons for Permanent Deferral'],
+    ['how to sign up for 24th July blood drive?'],
+    ['Bye Bye Bot Bot!']
 ]
 
 start_markup = ReplyKeyboardMarkup(start_keyboard, one_time_keyboard=True)
@@ -57,11 +57,11 @@ continue_keyboard = [['Continue', 'Nah']]
 
 continue_markup = ReplyKeyboardMarkup(continue_keyboard, one_time_keyboard=True)
 
-subanswers = ['If you had COVID-19, please wait 28 days after clinical recovery. \nIf you have taken Pfizer-Biontech Vaccine:, \nNo side effects : wait 3 days after vaccination. \nSide effects exlcuding fever, muscle ache, joint pain & rash: wait 1 week after side effects are RESOLVED. \nSide effects such as fever, muscle ache, joint pain & rash: wait 4 weeks after side effects are RESOLVED.'
-,'','Do NOT stop taking your medication.\nYou should not discontinue or stop taking medications prescribed or recommended by your physicians in order to donate blood.\nSome medications may affect your eligibility to donate blood. If the medication you are taking is not in this list or if you need further clarification, please call 6213 0626 and speak to our medical staff to determine if you are eligible to donate.\n\nPlease postphone your donation:\nAt least 1 days(24 hours) after:\n-Taking Antibiotics for Acne\n\nAt least 3 days after:\n-Taking Traditional Chinese Medicine\n-Asprin\n-Most prescription medication(excluding paracetamol, anti-histamines or sedatives)\n\nAt least 1 week after:\n-Taking antibiotics\n\nAt least 4 weeks after:\n-Isotretinoin\n\nFor Paracetamol/Panadol:\nYou may donate blood if you are taking paracetamol for pain relief (not for fever or flu), provided you are well on the day of the donation and do not experience any symptoms.'
+subanswers = ['• If you had COVID-19, please wait 28 days after clinical recovery.\n\nIf you have taken Pfizer-Biontech Vaccine:, \n• No side effects : wait 3 days after vaccination. \n• Side effects exlcuding fever, muscle ache, joint pain & rash: wait 1 week after side effects are RESOLVED. \n• Side effects such as fever, muscle ache, joint pain & rash: wait 4 weeks after side effects are RESOLVED.'
+,'','Do NOT stop taking your medication.\nYou should not discontinue or stop taking medications prescribed or recommended by your physicians in order to donate blood.\nSome medications may affect your eligibility to donate blood. If the medication you are taking is not in this list or if you need further clarification, please call 6213 0626 and speak to our medical staff to determine if you are eligible to donate.\n\nPlease postphone your donation:\nAt least 1 days(24 hours) after:\n• Taking Antibiotics for Acne\n\nAt least 3 days after:\n• Taking Traditional Chinese Medicine\n• Asprin\n• Most prescription medication(excluding paracetamol, anti-histamines or sedatives)\n\nAt least 1 week after:\n• Taking antibiotics\n\nAt least 4 weeks after:\n• Isotretinoin\n\nFor Paracetamol/Panadol:\n• You may donate blood if you are taking paracetamol for pain relief (not for fever or flu), provided you are well on the day of the donation and do not experience any symptoms.'
 ,'If you have anxiety disorder, obsessive disorder or depression, you may be able to donate blood if you have been certified mentally fit for blood donation by your treating psychiatrist and you are well on the day of donation.\nIt is important that you are able to consent to the donation process and fully understand all the information and questions contained in the Donor Health Assessment Questionnaire and Declaration Form. This is a statutory declaration that carries legal responsibilities and implications.\nFor more information or if you need further clarification, please call 6213 0626 and speak to our medical staff.'
-,'You should not donate blood for at least 12 months after the last sexual contact if:\nYou are a female donor who has engaged in sexual activity with a man whom you know, or suspect, to have had sex with another man.\nYou have engaged in sexual activity with someone whom you know, or suspect, to have AIDS or HIV.\nYou have paid for sex.\nYou have engaged in sexual activity with any of the following:\n-Someone whom you have known for 6 months or less.\n-More than one partner.\n-Someone diagnosed with syphilis, gonorrhoea or any other sexually transmitted diseases.\n\nNote: The term "sexual activity" means any of the activities below whether or not a condom or other protection was used:\n-Vaginal sex (contact between penis and vagina)\n-Oral sex (mouth or tongue on someone’s vagina, penis, or anus)\n-Anal sex (contact between penis and anus)'
-,'If the vaccine or immunisation is not in this list, or if you need further clarification, please call 6213 0626 to determine if you are eligible to donate.\nAs long as you are well at the time of donation, there is no waiting period or deferral if you received the following vaccines:\nAnthrax\nCholera\nDiphtheria\nHepatitis A\nHPV (cervical cancer)\nInfluenza / Flu vaccine (by injection)\nMeningococcal\nPertussis\nPneumococcal\nPolio (by injection)\nRabies\nTetanus\nTyphoid (by injection)\n\nWait for at least 2 weeks if you received the Hepatitis B vaccine.\n\nWait for at least 4 weeks if you received the following vaccines:\nBCG\nChickenpox\nDengue\nGerman measles (rubella)\nInfluenza / Flu vaccine (by intranasal spray)\nMMR (measles, mumps, rubella)\nShingles (varicella zoster)\nYellow fever\n\nWait for at least 12 months if you received vaccines :\nHepatitis B immune globulin (post exposure)\nhuman rabies immunoglobulin (a component of rabies post-exposure vaccination)']
+,'You should not donate blood for at least 12 months after the last sexual contact if:\n\n• You are a female donor who has engaged in sexual activity with a man whom you know, or suspect, to have had sex with another man.\n• You have engaged in sexual activity with someone whom you know, or suspect, to have AIDS or HIV.\n• You have paid for sex.\n• You have engaged in sexual activity with any of the following:\n• Someone whom you have known for 6 months or less.\n• More than one partner.\n• Someone diagnosed with syphilis, gonorrhoea or any other sexually transmitted diseases.\n\nNote: The term "sexual activity" means any of the activities below whether or not a condom or other protection was used:\n-Vaginal sex (contact between penis and vagina)\n-Oral sex (mouth or tongue on someone’s vagina, penis, or anus)\n-Anal sex (contact between penis and anus)'
+,'If the vaccine or immunisation is not in this list, or if you need further clarification, please call 6213 0626 to determine if you are eligible to donate.\nAs long as you are well at the time of donation, there is no waiting period or deferral if you received the following vaccines:\n• Anthrax\n• Cholera\n• Diphtheria\n• Hepatitis A\n• HPV (cervical cancer)\n• Influenza / Flu vaccine (by injection)\n• Meningococcal\n• Pertussis\n• Pneumococcal\n• Polio (by injection)\n• Rabies\n• Tetanus\n• Typhoid (by injection)\n\nWait for at least 2 weeks after:\n• Hepatitis B vaccine\n\nWait for at least 4 weeks after:\n• BCG\n• Chickenpox\n• Dengue\n• German measles (rubella)\n• Influenza / Flu vaccine (by intranasal spray)\n• MMR (measles, mumps, rubella)\n• Shingles (varicella zoster)\n• Yellow fever\n\nWait for at least 12 months after:\n• Hepatitis B immune globulin (post exposure)\n• human rabies immunoglobulin (a component of rabies post-exposure vaccination)']
 
 def answer(update: Update, context: CallbackContext) -> int:
   response = update.message.text
